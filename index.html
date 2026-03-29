@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --accent: #8b5cf6;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Background with PP LOGO Watermark */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            overflow: hidden;
+        }
+
+        /* Animated PP LOGO Background */
+        .bg-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            opacity: 0.03;
+            animation: rotate 60s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .bg-logo svg {
+            width: 100%;
+            height: 100%;
+            fill: white;
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 2rem;
+        }
+
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+            animation: float 3s ease-in-out infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.6);
+        }
+
+        /* Three Preview Images */
+        .preview-section {
+            margin: 5rem 0;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+        }
+
+        .three-images {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .img-card {
+            width: 280px;
+            height: 500px;
+            border-radius: 25px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            transition: all 0.4s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .img-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 30px 60px rgba(99, 102, 241, 0.3);
+        }
+
+        .img-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .img-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .img-number {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(99, 102, 241, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+            z-index: 2;
+        }
+
+        /* Features Section */
+        .features {
+            margin: 6rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .feature-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .feature-content {
+            padding: 2rem;
+        }
+
+        .feature-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-content p {
+            color: #94a3b8;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        /* Info System Section */
+        .info-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 4rem;
+            margin: 6rem 0;
+            backdrop-filter: blur(20px);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .info-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .info-text p {
+            color: #94a3b8;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .system-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .info-item {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateX(5px);
+            border-color: var(--primary);
+        }
+
+        .info-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-item span {
+            color: #e2e8f0;
+            font-size: 1.1rem;
+        }
+
+        .info-visual {
+            position: relative;
+            height: 100%;
+            min-height: 400px;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .info-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 24px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #64748b;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero h1 { font-size: 2.5rem; }
+            .info-grid { grid-template-columns: 1fr; }
+            .three-images { flex-direction: column; align-items: center; }
+            .img-card { width: 280px; height: 500px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .system-info { grid-template-columns: 1fr; }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Background with PP LOGO -->
+    <div class="bg-container">
+        <div class="bg-glow"></div>
+        <div class="bg-logo">
+            <!-- PP LOGO SVG Watermark -->
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 5 L90 25 L90 75 L50 95 L10 75 L10 25 Z"/>
+                <text x="50" y="65" font-size="40" text-anchor="middle" fill="white" font-weight="bold">PP</text>
+            </svg>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Hero: Download Only -->
+        <section class="hero">
+            <div class="app-icon">📱</div>
+            <h1>PRAINCE X STORE</h1>
+            <p>Download our revolutionary application and transform your digital experience today.</p>
+            
+            <!-- EDIT DOWNLOAD URL HERE -->
+            <a href="https://www.mediafire.com/file/ui95y1uj2dwccny/PRAINCE_X_STORE.apk/file" class="download-btn" id="downloadLink">
+                <span>⬇️</span>
+                Download App
+            </a>
+        </section>
+
+        <!-- Three Preview Images -->
+        <section class="preview-section">
+            <h2 class="section-title">App Screenshots</h2>
+            <div class="three-images">
+                <!-- EDIT IMAGE URL 1 -->
+                <div class="img-card">
+                    <span class="img-number">1</span>
+                    <img src="https://i.supaimg.com/d21c2e21-f164-4d5f-8174-5259397ec48f/d2905329-dff1-4d7a-b465-8943f0fcb3fb.png"() alt="Screenshot 1">
+                </div>
+                <!-- EDIT IMAGE URL 2 -->
+                <div class="img-card">
+                    <span class="img-number">2</span>
+                    <img src="https://i.supaimg.com/d21c2e21-f164-4d5f-8174-5259397ec48f/99392435-d463-4b0c-9503-e7b0504c6fd6.jpg" alt="Screenshot 2">
+                </div>
+                <!-- EDIT IMAGE URL 3 -->
+                <div class="img-card">
+                    <span class="img-number">3</span>
+                    <img src="https://i.supaimg.com/d21c2e21-f164-4d5f-8174-5259397ec48f/a8ec0271-9400-44ec-a429-f4b83949b0e6.jpg" alt="Screenshot 3">
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <h2 class="section-title" style="text-align: center;">PROBLEM DURING INSTALLING👇</h2>
+            <div class="features-grid">
+                <!-- FEATURE 1 -->
+                <div class="feature-card">
+                    <!-- EDIT FEATURE IMAGE 1 -->
+                    <img src="https://i.supaimg.com/d21c2e21-f164-4d5f-8174-5259397ec48f/157719b0-e323-4463-a839-60bbe3984c55.jpg" alt="Feature 1" class="feature-img">
+                    <div class="feature-content">
+                        <h3>1 click on install</h3>
+                        <p>When you download our app you face some issues you solve and enjoy our app .</p>
+                    </div>
+                </div>
+                
+                <!-- FEATURE 2 -->
+                <div class="feature-card">
+                    <!-- 2 chating like WhatsApp details 2 -->
+                    <img src="https://i.supaimg.com/d21c2e21-f164-4d5f-8174-5259397ec48f/a8ec0271-9400-44ec-a429-f4b83949b0e6.jpg" alt="Feature 2" class="feature-img">
+                    <div class="feature-content">
+                        <h3>3 chating like WhatsApp </h3>
+                        <p>Advanced encryption and security protocols protect your data with enterprise-grade safety measures.</p>
+                    </div>
+                </div>
+                
+                <!-- FEATURE 3 -->
+                <div class="feature-card">
+                    <!-- EDIT FEATURE IMAGE 3 -->
+                    <img src="https://i.supaimg.com/d21c2e21-f164-4d5f-8174-5259397ec48f/d1d33471-1ea0-4a3d-a65a-ee2a851c51b1.jpg" alt="Feature 3" class="feature-img">
+                    <div class="feature-content">
+                        <h3>3 installed anyway</h3>
+                        <p>Beautiful, intuitive interface crafted with precision to provide the best user experience possible.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Info System Section -->
+        <section class="info-section">
+            <div class="info-grid">
+                <div class="info-text">
+                    <h2>System Information</h2>
+                    <p>Our application is built with cutting-edge technology to ensure compatibility and performance across all devices.</p>
+                    <p>Get detailed insights about app specifications, requirements, and technical details to ensure smooth operation on your device.</p>
+                    
+                    <div class="system-info">
+                        <div class="info-item">
+                            <strong>Version</strong>
+                            <span>1.0.0.0</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Size</strong>
+                            <span>10MB</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Platform</strong>
+                            <span>iOS & Android</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Updated</strong>
+                            <span>March 2026</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Developer</strong>
+                            <span>HASNAIN KHAN Studio</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Rating</strong>
+                            <span>4.9/5.0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-visual">
+                    <!-- EDIT INFO SECTION IMAGE -->
+                    <img src="https://i.supaimg.com/d21c2e21-f164-4d5f-8174-5259397ec48f/a7ddf69b-ca64-49ff-9a35-252e297e23fd.png" alt="System Info">
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 PP Studio. All rights reserved.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Smooth scroll animation on load
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Download tracking (optional)
+        document.getElementById('downloadLink').addEventListener('click', function(e) {
+            // Add analytics or tracking here
+            console.log('Download clicked');
+            
+            // Animation feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+        });
+    </script>
+
+</body>
+</html>
